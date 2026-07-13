@@ -517,12 +517,28 @@ body {
   margin: 0.5rem 0;
 }
 
-.estimated-time {
-  padding: 0.5rem;
-  font-weight: 600;
-  color: var(--color-muted);
+.estimated-time-custom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+  background: var(--color-glass-white);
+  border: 1px dashed var(--color-glass-border);
+  border-radius: 1rem;
   font-size: 0.95rem;
+  font-weight: 600;
 }
+
+.estimated-time-custom .estimated-time-label {
+  color: var(--color-muted);
+}
+
+.estimated-time-custom .estimated-time-value {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
 
 .config-buttons {
   display: flex;

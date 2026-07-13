@@ -166,6 +166,11 @@ export const ConfigScreen = () => {
                 className="slider"
               />
             </div>
+
+            <div className="estimated-time-custom">
+              <span className="estimated-time-label">{t('estimated_time')}</span>
+              <span className="estimated-time-value">{getEstimatedTime()}</span>
+            </div>
           </>
         )}
 
@@ -210,10 +215,6 @@ export const ConfigScreen = () => {
             Test Tone
           </button>
         </div>
-      </div>
-
-      <div className="estimated-time">
-        {t('estimated_time')}: {getEstimatedTime()}
       </div>
 
       {/* Buttons */}
