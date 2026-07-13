@@ -47,7 +47,10 @@ window.translations = {
     soundscape_none: "Ninguno",
     soundscape_rain: "Lluvia",
     soundscape_ocean: "Océano",
-    soundscape_wind: "Viento"
+    soundscape_wind: "Viento",
+    test_tone: "Probar Pitido",
+    test_soundscape: "Probar Ambiente",
+    stop_preview: "Detener Sonido"
   },
   en: {
     appTitle: "HydroCycle",
@@ -96,7 +99,10 @@ window.translations = {
     soundscape_none: "None",
     soundscape_rain: "Rain",
     soundscape_ocean: "Ocean",
-    soundscape_wind: "Wind"
+    soundscape_wind: "Wind",
+    test_tone: "Test Tone",
+    test_soundscape: "Test Ambient",
+    stop_preview: "Stop Preview"
   },
   fr: {
     appTitle: "HydroCycle",
@@ -145,7 +151,10 @@ window.translations = {
     soundscape_none: "Aucun",
     soundscape_rain: "Pluie",
     soundscape_ocean: "Océan",
-    soundscape_wind: "Vent"
+    soundscape_wind: "Vent",
+    test_tone: "Tester la tonalité",
+    test_soundscape: "Tester l'ambiance",
+    stop_preview: "Arrêter l'aperçu"
   },
   it: {
     appTitle: "HydroCycle",
@@ -194,7 +203,10 @@ window.translations = {
     soundscape_none: "Nessuno",
     soundscape_rain: "Pioggia",
     soundscape_ocean: "Oceano",
-    soundscape_wind: "Vento"
+    soundscape_wind: "Vento",
+    test_tone: "Prova tono",
+    test_soundscape: "Prova ambiente",
+    stop_preview: "Ferma anteprima"
   },
   de: {
     appTitle: "HydroCycle",
@@ -243,7 +255,10 @@ window.translations = {
     soundscape_none: "Keine",
     soundscape_rain: "Regen",
     soundscape_ocean: "Ozean",
-    soundscape_wind: "Wind"
+    soundscape_wind: "Wind",
+    test_tone: "Ton testen",
+    test_soundscape: "Hintergrund testen",
+    stop_preview: "Vorschau stoppen"
   },
   pt: {
     appTitle: "HydroCycle",
@@ -292,7 +307,10 @@ window.translations = {
     soundscape_none: "Nenhum",
     soundscape_rain: "Chuva",
     soundscape_ocean: "Oceano",
-    soundscape_wind: "Vento"
+    soundscape_wind: "Vento",
+    test_tone: "Testar tom",
+    test_soundscape: "Testar ambiente",
+    stop_preview: "Parar som"
   },
   zh: {
     appTitle: "HydroCycle",
@@ -341,6 +359,9 @@ window.translations = {
     soundscape_none: "无背景音",
     soundscape_rain: "雨声",
     soundscape_ocean: "海浪声",
-    soundscape_wind: "风声"
+    soundscape_wind: "风声",
+    test_tone: "测试提示音",
+    test_soundscape: "测试背景音",
+    stop_preview: "停止预览"
   }
 };

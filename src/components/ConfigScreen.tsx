@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSettings } from '../contexts/SettingsContext';
 import { useSession } from '../contexts/SessionContext';
 import { useTranslation } from '../hooks/useTranslation';
@@ -11,6 +11,8 @@ export const ConfigScreen = () => {
   const { t } = useTranslation();
 
   const [previewPhase, setPreviewPhase] = useState<'hot' | 'cold'>('hot');
+  const [testingSoundscape, setTestingSoundscape] = useState<boolean>(false);
+  const testSoundscapeRef = useRef<HTMLAudioElement | null>(null);
 
   // Preview phase switching animation
   useEffect(() => {
@@ -20,7 +22,39 @@ export const ConfigScreen = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Clean up soundscape test audio on unmount
+  useEffect(() => {
+    return () => {
+      if (testSoundscapeRef.current) {
+        testSoundscapeRef.current.pause();
+        testSoundscapeRef.current = null;
+      }
+    };
+  }, []);
+
+  // Control playback of the soundscape preview
+  useEffect(() => {
+    if (testingSoundscape && config.soundscape && config.soundscape !== 'none') {
+      if (!testSoundscapeRef.current) {
+        testSoundscapeRef.current = new Audio();
+        testSoundscapeRef.current.loop = true;
+      }
+      const baseUrl = import.meta.env.BASE_URL || '/';
+      const src = `${baseUrl}assets/${config.soundscape}.mp3`;
+      if (testSoundscapeRef.current.src !== src) {
+        testSoundscapeRef.current.src = src;
+      }
+      testSoundscapeRef.current.volume = config.volume;
+      testSoundscapeRef.current.play().catch(e => console.warn("Preview playback failed:", e));
+    } else {
+      if (testSoundscapeRef.current) {
+        testSoundscapeRef.current.pause();
+      }
+    }
+  }, [testingSoundscape, config.soundscape, config.volume]);
+
   const handleStart = () => {
+    setTestingSoundscape(false);
     setIsPlaying(true);
     setCurrentRound(1);
     
@@ -34,6 +68,7 @@ export const ConfigScreen = () => {
   };
 
   const handleResetConfig = () => {
+    setTestingSoundscape(false);
     updateConfig({
       hotDuration: 120,
       coldDuration: 60,
@@ -175,20 +210,55 @@ export const ConfigScreen = () => {
         )}
 
         {/* Ambient audio selection */}
-        <div className="slider-group">
-          <label>
-            <span>{t('soundscapeLabel')}</span>
-          </label>
-          <select 
-            className="select-input" 
-            value={config.soundscape}
-            onChange={(e) => updateConfig({ soundscape: e.target.value })}
-          >
-            <option value="none">{t('soundscape_none')}</option>
-            <option value="rain">{t('soundscape_rain')}</option>
-            <option value="ocean">{t('soundscape_ocean')}</option>
-            <option value="wind">{t('soundscape_wind')}</option>
-          </select>
+        <div className="soundscape-selector-group">
+          <label className="soundscape-label">{t('soundscapeLabel')}</label>
+          <div className="soundscape-grid">
+            <button 
+              type="button"
+              className={`soundscape-btn ${config.soundscape === 'none' ? 'active' : ''}`}
+              onClick={() => {
+                updateConfig({ soundscape: 'none' });
+                setTestingSoundscape(false);
+              }}
+            >
+              <span className="soundscape-icon">🔇</span>
+              <span className="soundscape-name">{t('soundscape_none')}</span>
+            </button>
+            <button 
+              type="button"
+              className={`soundscape-btn ${config.soundscape === 'rain' ? 'active' : ''}`}
+              onClick={() => updateConfig({ soundscape: 'rain' })}
+            >
+              <span className="soundscape-icon">🌧️</span>
+              <span className="soundscape-name">{t('soundscape_rain')}</span>
+            </button>
+            <button 
+              type="button"
+              className={`soundscape-btn ${config.soundscape === 'ocean' ? 'active' : ''}`}
+              onClick={() => updateConfig({ soundscape: 'ocean' })}
+            >
+              <span className="soundscape-icon">🌊</span>
+              <span className="soundscape-name">{t('soundscape_ocean')}</span>
+            </button>
+            <button 
+              type="button"
+              className={`soundscape-btn ${config.soundscape === 'wind' ? 'active' : ''}`}
+              onClick={() => updateConfig({ soundscape: 'wind' })}
+            >
+              <span className="soundscape-icon">💨</span>
+              <span className="soundscape-name">{t('soundscape_wind')}</span>
+            </button>
+          </div>
+          
+          {config.soundscape !== 'none' && (
+            <button
+              type="button"
+              className={`soundscape-test-btn ${testingSoundscape ? 'testing' : ''}`}
+              onClick={() => setTestingSoundscape(!testingSoundscape)}
+            >
+              {testingSoundscape ? `⏹️ ${t('stop_preview')}` : `▶️ ${t('test_soundscape')}`}
+            </button>
+          )}
         </div>
 
         {/* Volume & test audio signal */}
@@ -208,11 +278,11 @@ export const ConfigScreen = () => {
           />
           <button 
             type="button" 
-            className="speed-btn" 
+            className="speed-btn tone-test-btn" 
             onClick={testAudioSignal}
             style={{ padding: '0.45rem 1.2rem', fontSize: '0.85rem', marginTop: '0.4rem', alignSelf: 'center' }}
           >
-            Test Tone
+            {t('test_tone')}
           </button>
         </div>
       </div>
@@ -222,7 +292,7 @@ export const ConfigScreen = () => {
         <button className="reset-config-btn" onClick={handleResetConfig}>
           {t('resetConfigBtn')}
         </button>
-        <button className="reset-config-btn" onClick={() => setPhase('stats')}>
+        <button className="reset-config-btn" onClick={() => { setTestingSoundscape(false); setPhase('stats'); }}>
           {t('statsBtn')}
         </button>
         <button className="start-button" onClick={handleStart}>
