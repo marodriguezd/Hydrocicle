@@ -1,0 +1,5 @@
+{
+  "name": "HydroCycle - Sequential Shower Timer",
+  "description": "A sequential timer for hot and cold shower cycles, featuring customizable durations and audio-visual alerts.",
+  "requestFramePermissions": []
+}
