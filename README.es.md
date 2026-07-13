@@ -5,20 +5,24 @@
   <h3>Guía Interactiva y Temporizador de Terapia de Contraste y Exposición al Frío</h3>
 
   [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](https://opensource.org/licenses/Apache-2.0)
-  [![Demo en Vivo](https://img.shields.io/badge/Demo%20en%20Vivo-Online-brightgreen)](https://marodriguezd.github.io/Hydrocicle/)
-  [![Creado con](https://img.shields.io/badge/Creado%20con-React%20%2B%20Vite%20%2B%20TS-61DAFB?logo=react&logoColor=white)](https://react.dev/)
-  [![PWA](https://img.shields.io/badge/PWA-Listo-5A0FC8?logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
+  [![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-brightgreen)](https://marodriguezd.github.io/Hydrocicle/)
+  [![Made With](https://img.shields.io/badge/Made%20With-React%20%2B%20Vite%20%2B%20TS-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+  [![PWA](https://img.shields.io/badge/PWA-Ready-5A0FC8?logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
 
   [Características](#-características) • [Instalación](#-cómo-instalar) • [Tecnologías](#-tecnologías) • [Licencia](#-licencia)
   
-  **[🇺🇸 Read in English](README.md)**
+  **[🇬🇧 Read in English](README.md)**
 </div>
 
 ---
 
-## 🌟 Descripción General
+## 🌟 Resumen
 
 **HydroCycle** es una aplicación web interactiva diseñada para guiarte en terapias de contraste (duchas calientes/frías) y entrenamiento de exposición al frío. Compartiendo el mismo ecosistema de salud y bienestar que **Bubble Breathing**, te ayuda a gestionar tus intervalos a través de una interfaz limpia a pantalla completa con animaciones en tiempo real, alertas de audio, registro offline de sesiones y estadísticas de racha—sin necesidad de instalación.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/marodriguezd/Hydrocicle/main/public/assets/demo-screenshot.png" alt="Screenshot de HydroCycle" width="400">
+</p>
 
 ---
 
@@ -49,11 +53,17 @@
 
 ## 📱 Cómo Instalar
 
-Instala HydroCycle como una aplicación web (PWA) para obtener la mejor experiencia a pantalla completa:
+Instala HydroCycle como aplicación web (PWA) para la mejor experiencia:
 
 1. **Abre** la [demo en vivo](https://marodriguezd.github.io/Hydrocicle/) en tu navegador (Chrome en Android, Safari en iOS).
 2. **Toca** el botón de Menú (⋮) o Compartir (⎙).
 3. **Selecciona** "Añadir a la pantalla de inicio" o "Instalar Aplicación".
+
+*Nota: La aplicación está diseñada para mantenerse responsiva incluso con niveles altos de zoom, como se muestra en la demostración a continuación.*
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/marodriguezd/Hydrocicle/main/public/assets/how_to_install_web_app.gif" alt="Instalación de HydroCycle y Adaptabilidad de Zoom" width="300">
+</p>
 
 ---
 

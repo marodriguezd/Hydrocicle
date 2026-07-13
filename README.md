@@ -2,7 +2,7 @@
 
 <div align="center">
   <img src="public/assets/icon.svg" alt="HydroCycle Logo" width="128" height="128">
-  <h3>Immersive Guided Contrast Therapy &amp; Cold Exposure Timer</h3>
+  <h3>Immersive Guided Contrast Therapy & Cold Exposure Timer</h3>
 
   [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](https://opensource.org/licenses/Apache-2.0)
   [![Live Demo](https://img.shields.io/badge/Live%20Demo-Online-brightgreen)](https://marodriguezd.github.io/Hydrocicle/)
@@ -19,6 +19,10 @@
 ## 🌟 Overview
 
 **HydroCycle** is an immersive, app-like web application designed for guided contrast therapy (hot/cold shower intervals) and cold exposure training. Part of the same health & wellness ecosystem as **Bubble Breathing**, it helps you manage your intervals through a clean, full-screen interface with real-time animations, audio feedback, offline session tracking, and streaking statistics—without any installation required.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/marodriguezd/Hydrocicle/main/public/assets/demo-screenshot.png" alt="HydroCycle Screenshot" width="400">
+</p>
 
 ---
 
@@ -49,11 +53,17 @@
 
 ## 📱 How to Install
 
-Install HydroCycle as a Web App (PWA) for the best fullscreen experience:
+Install HydroCycle as a Web App (PWA) for the best experience:
 
 1. **Open** the [live demo](https://marodriguezd.github.io/Hydrocicle/) in your browser (Chrome/Android, Safari/iOS).
 2. **Tap** the Menu (⋮) or Share (⎙) button.
 3. **Select** "Add to Home Screen" or "Install App".
+
+*Note: The app is designed to stay responsive even at high zoom levels, as shown in the demonstration below.*
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/marodriguezd/Hydrocicle/main/public/assets/how_to_install_web_app.gif" alt="HydroCycle Installation & Zoom Adaptability" width="400">
+</p>
 
 ---
 
