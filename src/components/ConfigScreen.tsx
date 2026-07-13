@@ -205,7 +205,7 @@ export const ConfigScreen = () => {
             type="button" 
             className="speed-btn" 
             onClick={testAudioSignal}
-            style={{ padding: '0.4rem', fontSize: '0.8rem', marginTop: '0.2rem' }}
+            style={{ padding: '0.45rem 1.2rem', fontSize: '0.85rem', marginTop: '0.4rem', alignSelf: 'center' }}
           >
             Test Tone
           </button>
@@ -221,17 +221,13 @@ export const ConfigScreen = () => {
         <button className="reset-config-btn" onClick={handleResetConfig}>
           {t('resetConfigBtn')}
         </button>
+        <button className="reset-config-btn" onClick={() => setPhase('stats')}>
+          {t('statsBtn')}
+        </button>
         <button className="start-button" onClick={handleStart}>
           {t('startBtn')}
         </button>
       </div>
-      <button 
-        className="speed-btn" 
-        onClick={() => setPhase('stats')}
-        style={{ marginTop: '0.8rem', width: '100%', borderRadius: '1.5rem', padding: '0.9rem' }}
-      >
-        {t('statsBtn')}
-      </button>
     </div>
   );
 };
