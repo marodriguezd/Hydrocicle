@@ -4,6 +4,7 @@ import { useSettings } from '../contexts/SettingsContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { useTimer } from '../contexts/TimerContext';
 import { formatTimeDigital } from '../utils/timeFormat';
+import { Flame, Snowflake, RotateCcw, Play, Pause, SkipForward } from 'lucide-react';
 
 export const ShowerScreen = () => {
   const { config } = useSettings();
@@ -44,8 +45,8 @@ export const ShowerScreen = () => {
             height: '8.6rem'
           }}
         >
-          <div className="breath-counter" style={{ fontSize: '3.5rem' }}>
-            {isHot ? '🔥' : '❄️'}
+          <div className="breath-counter" style={{ fontSize: '3.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {isHot ? <Flame size={56} color="white" /> : <Snowflake size={56} color="white" />}
           </div>
         </div>
       </div>
@@ -71,21 +72,21 @@ export const ShowerScreen = () => {
           title="Reset"
           onClick={stopSession}
         >
-          <span style={{ fontSize: '1.2rem' }}>🔄</span>
+          <span style={{ fontSize: '1.2rem', display: 'flex' }}><RotateCcw size={24} /></span>
         </button>
         <button 
           className="control-btn primary-btn" 
           onClick={handlePlayPause}
           title={isPlaying ? 'Pause' : 'Play'}
         >
-          <span style={{ fontSize: '1.5rem' }}>{isPlaying ? '⏸' : '▶'}</span>
+          <span style={{ fontSize: '1.5rem', display: 'flex' }}>{isPlaying ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" />}</span>
         </button>
         <button 
           className="control-btn" 
           title="Skip"
           onClick={skipPhase}
         >
-          <span style={{ fontSize: '1.2rem' }}>⏭</span>
+          <span style={{ fontSize: '1.2rem', display: 'flex' }}><SkipForward size={24} /></span>
         </button>
       </div>
 

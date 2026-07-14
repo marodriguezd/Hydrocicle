@@ -3,6 +3,7 @@ import { useSession } from '../contexts/SessionContext';
 import { useHistory } from '../contexts/HistoryContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { formatTime } from '../utils/timeFormat';
+import { Snowflake, Droplet, Timer, X } from 'lucide-react';
 
 export const StatsScreen = () => {
   const { phase, setPhase } = useSession();
@@ -59,17 +60,17 @@ export const StatsScreen = () => {
         ) : (
           <div className="history-list">
             {history.slice(0, 10).map((session, idx) => {
-              let statusIcon = '❄️';
+              let StatusIconComponent = Snowflake;
               let statusDotColor = '#3498db';
               
               if (session.totalColdTime >= 180) {
-                statusIcon = '🥶';
+                StatusIconComponent = Snowflake; // Ice cream or something else? Just snowflake is fine
                 statusDotColor = '#1abc9c';
               } else if (session.totalColdTime >= 60) {
-                statusIcon = '💧';
+                StatusIconComponent = Droplet;
                 statusDotColor = '#3498db';
               } else {
-                statusIcon = '⏱️';
+                StatusIconComponent = Timer;
                 statusDotColor = 'var(--color-accent)';
               }
 
@@ -77,7 +78,7 @@ export const StatsScreen = () => {
                 <div key={session.id || idx} className="history-item">
                   <div className="history-item-left">
                     <span className="history-status-dot" style={{ backgroundColor: statusDotColor, color: statusDotColor }}></span>
-                    <span className="history-icon">{statusIcon}</span>
+                    <span className="history-icon" style={{ display: 'flex' }}><StatusIconComponent size={20} color={statusDotColor} /></span>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                       <span className="history-date">{new Date(session.date).toLocaleDateString()}</span>
                       <span className="history-date" style={{ fontSize: '0.85em', opacity: 0.8, marginTop: '2px' }}>
@@ -92,9 +93,9 @@ export const StatsScreen = () => {
                     <button 
                       onClick={() => handleDelete(session.id)}
                       title={t('delete')}
-                      style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer', fontSize: '1.2rem', padding: '0 4px', lineHeight: 1 }}
+                      style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer', display: 'flex', padding: '0 4px' }}
                     >
-                      ×
+                      <X size={18} />
                     </button>
                   </strong>
                 </div>

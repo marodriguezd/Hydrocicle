@@ -4,6 +4,7 @@ import { useHistory } from '../contexts/HistoryContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { formatTime, formatTimeDigital } from '../utils/timeFormat';
+import { Flame, Snowflake, Trophy } from 'lucide-react';
 
 export const ResultsScreen = () => {
   const { phase, resetSession, roundResults } = useSession();
@@ -60,8 +61,8 @@ export const ResultsScreen = () => {
             {roundResults.map((r) => (
               <div key={r.round} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.4rem 0', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
                 <span style={{ fontSize: '0.9rem', opacity: 0.8 }}>{t('roundLabel', { round: r.round })}:</span>
-                <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>
-                  {config.hotDuration > 0 && `🔥 ${formatTimeDigital(r.hotDuration)} | `}❄️ {formatTimeDigital(r.coldDuration)}
+                <span style={{ fontSize: '0.9rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                  {config.hotDuration > 0 && <><Flame size={14} color="var(--color-accent)" /> {formatTimeDigital(r.hotDuration)} | </>}<Snowflake size={14} color="#3498db" /> {formatTimeDigital(r.coldDuration)}
                 </span>
               </div>
             ))}
@@ -69,13 +70,13 @@ export const ResultsScreen = () => {
         )}
 
         <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', margin: '1rem 0' }}>
-          <div>
-            <div style={{ fontSize: '1.5rem' }}>🔥</div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ fontSize: '1.5rem', display: 'flex' }}><Flame size={32} color="var(--color-accent)" /></div>
             <div style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-accent)' }}>{currentStreak}</div>
             <div style={{ fontSize: '0.8rem', color: 'var(--color-muted)' }}>{t('currentStreak')}</div>
           </div>
-          <div>
-            <div style={{ fontSize: '1.5rem' }}>🏆</div>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ fontSize: '1.5rem', display: 'flex' }}><Trophy size={32} color="#f1c40f" /></div>
             <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>{longestStreak}</div>
             <div style={{ fontSize: '0.8rem', color: 'var(--color-muted)' }}>{t('bestStreak')}</div>
           </div>

@@ -4,6 +4,7 @@ import { useSession } from '../contexts/SessionContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { playTone } from '../contexts/TimerContext';
 import { formatTimeDigital } from '../utils/timeFormat';
+import { Flame, Snowflake, VolumeX, CloudRain, Waves, Wind, Square, Play } from 'lucide-react';
 
 export const ConfigScreen = () => {
   const { config, updateConfig } = useSettings();
@@ -111,7 +112,7 @@ export const ConfigScreen = () => {
           style={{ transform: 'scale(1.1)', transition: 'all 1s ease' }}
         >
           <div className="breath-counter">
-            {config.hotDuration === 0 ? '❄️' : previewPhase === 'hot' ? '🔥' : '❄️'}
+            {config.hotDuration === 0 ? <Snowflake size={48} color="white" /> : previewPhase === 'hot' ? <Flame size={48} color="white" /> : <Snowflake size={48} color="white" />}
           </div>
         </div>
       </div>
@@ -221,7 +222,7 @@ export const ConfigScreen = () => {
                 setTestingSoundscape(false);
               }}
             >
-              <span className="soundscape-icon">🔇</span>
+              <span className="soundscape-icon"><VolumeX size={24} /></span>
               <span className="soundscape-name">{t('soundscape_none')}</span>
             </button>
             <button 
@@ -229,7 +230,7 @@ export const ConfigScreen = () => {
               className={`soundscape-btn ${config.soundscape === 'rain' ? 'active' : ''}`}
               onClick={() => updateConfig({ soundscape: 'rain' })}
             >
-              <span className="soundscape-icon">🌧️</span>
+              <span className="soundscape-icon"><CloudRain size={24} /></span>
               <span className="soundscape-name">{t('soundscape_rain')}</span>
             </button>
             <button 
@@ -237,7 +238,7 @@ export const ConfigScreen = () => {
               className={`soundscape-btn ${config.soundscape === 'ocean' ? 'active' : ''}`}
               onClick={() => updateConfig({ soundscape: 'ocean' })}
             >
-              <span className="soundscape-icon">🌊</span>
+              <span className="soundscape-icon"><Waves size={24} /></span>
               <span className="soundscape-name">{t('soundscape_ocean')}</span>
             </button>
             <button 
@@ -245,7 +246,7 @@ export const ConfigScreen = () => {
               className={`soundscape-btn ${config.soundscape === 'wind' ? 'active' : ''}`}
               onClick={() => updateConfig({ soundscape: 'wind' })}
             >
-              <span className="soundscape-icon">💨</span>
+              <span className="soundscape-icon"><Wind size={24} /></span>
               <span className="soundscape-name">{t('soundscape_wind')}</span>
             </button>
           </div>
@@ -255,8 +256,9 @@ export const ConfigScreen = () => {
               type="button"
               className={`soundscape-test-btn ${testingSoundscape ? 'testing' : ''}`}
               onClick={() => setTestingSoundscape(!testingSoundscape)}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}
             >
-              {testingSoundscape ? `⏹️ ${t('stop_preview')}` : `▶️ ${t('test_soundscape')}`}
+              {testingSoundscape ? <><Square size={16} fill="currentColor" /> {t('stop_preview')}</> : <><Play size={16} fill="currentColor" /> {t('test_soundscape')}</>}
             </button>
           )}
         </div>

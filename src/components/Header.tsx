@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSession } from '../contexts/SessionContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useTranslation } from '../hooks/useTranslation';
+import { Sun, Moon } from 'lucide-react';
 
 const LANGUAGES = [
   { code: 'en', name: 'English', flag: '🇬🇧' },
@@ -87,8 +88,9 @@ export const Header = () => {
         className={`theme-toggle-btn ${(phase !== 'idle' && phase !== 'stats') ? 'hidden' : ''}`} 
         title="Change theme"
         onClick={toggleTheme}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
       >
-        {config.theme === 'dark' ? '☀️' : '🌙'}
+        {config.theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
       </button>
       <button 
         className={`finish-btn ${(phase !== 'hot' && phase !== 'cold') ? 'hidden' : ''}`} 
