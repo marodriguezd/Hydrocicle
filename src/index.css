@@ -325,7 +325,7 @@ body {
   max-width: 28rem;
   margin: 0 auto;
   padding: 1.5rem;
-  padding-bottom: calc(1.5rem + env(safe-area-inset-top));
+  padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
   text-align: center;
   position: relative;
   overflow-y: auto;
@@ -343,7 +343,15 @@ body {
 .screen.active {
   display: flex;
   flex-grow: 1;
-  justify-content: space-evenly;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.screen.active::before,
+.screen.active::after {
+  content: '';
+  margin: auto;
+  flex-shrink: 0;
 }
 
 .hexagon-container {
