@@ -1,5 +1,5 @@
 {
   "name": "HydroCycle - Immersive Guided Contrast Therapy & Cold Exposure Timer",
-  "description": "An immersive, app-like web application designed for guided contrast therapy (hot/cold shower intervals) and cold exposure training.",
+  "description": "❄️ Immersive guided contrast therapy & cold exposure timer PWA with real-time animations, gamification, stats, dashboard, 7 languages, and dark/light themes. Built with React + TypeScript + Vite.",
   "requestFramePermissions": []
 }
