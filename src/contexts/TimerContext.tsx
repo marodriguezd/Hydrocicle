@@ -1,6 +1,6 @@
-import { useEffect, useRef, useCallback } from 'react';
-import { useSession, RoundResult } from '../contexts/SessionContext';
-import { useSettings } from '../contexts/SettingsContext';
+import React, { createContext, useContext, useEffect, useRef, useCallback } from 'react';
+import { useSession, RoundResult } from './SessionContext';
+import { useSettings } from './SettingsContext';
 
 let audioCtx: AudioContext | null = null;
 
@@ -44,7 +44,16 @@ export const vibrate = (pattern: number | number[]) => {
   }
 };
 
-export const useShowerTimer = () => {
+interface TimerState {
+  startSession: () => void;
+  stopSession: () => void;
+  skipPhase: () => void;
+  playTone: (frequency: number, durationMs: number, volume: number, type?: OscillatorType) => void;
+}
+
+const TimerContext = createContext<TimerState | null>(null);
+
+export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
   const { config } = useSettings();
   const {
     phase, setPhase,
@@ -181,37 +190,48 @@ export const useShowerTimer = () => {
     transitionToNext();
   };
 
-  // Timer loop
+  // Timer tick
   useEffect(() => {
     if (isPlaying && (phase === 'hot' || phase === 'cold')) {
       secondsInPhaseRef.current = 0;
       
       intervalRef.current = window.setInterval(() => {
         setTimeLeft(prev => {
-          if (prev <= 1) {
-            // Reached 0
-            stopTimer();
-            // Schedule state update on next tick to avoid React warning
-            setTimeout(transitionToNext, 0);
-            return 0;
+          if (prev > 0) {
+            const nextVal = prev - 1;
+            secondsInPhaseRef.current += 1;
+            
+            // Sound warnings during last 5 seconds
+            if (nextVal <= 5 && nextVal > 0) {
+              playWarningBeep();
+              vibrate(100);
+            }
+            return nextVal;
           }
-          
-          const nextVal = prev - 1;
-          secondsInPhaseRef.current += 1;
-
-          // Sound warnings during last 5 seconds
-          if (nextVal <= 5 && nextVal > 0) {
-            playWarningBeep();
-            vibrate(100);
-          }
-          
-          return nextVal;
+          return 0;
         });
       }, 1000);
     }
 
     return () => stopTimer();
-  }, [isPlaying, phase, transitionToNext, playWarningBeep, stopTimer, setTimeLeft]);
+  }, [isPlaying, phase, playWarningBeep, stopTimer, setTimeLeft]);
 
-  return { startSession, stopSession, skipPhase, playTone };
+  // Phase transition check
+  useEffect(() => {
+    if (isPlaying && (phase === 'hot' || phase === 'cold') && timeLeft === 0) {
+      transitionToNext();
+    }
+  }, [isPlaying, phase, timeLeft, transitionToNext]);
+
+  return (
+    <TimerContext.Provider value={{ startSession, stopSession, skipPhase, playTone }}>
+      {children}
+    </TimerContext.Provider>
+  );
+};
+
+export const useTimer = () => {
+  const context = useContext(TimerContext);
+  if (!context) throw new Error('useTimer must be used within TimerProvider');
+  return context;
 };

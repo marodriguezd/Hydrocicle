@@ -2,13 +2,13 @@ import React from 'react';
 import { useSession } from '../contexts/SessionContext';
 import { useSettings } from '../contexts/SettingsContext';
 import { useTranslation } from '../hooks/useTranslation';
-import { useShowerTimer } from '../hooks/useShowerTimer';
+import { useTimer } from '../contexts/TimerContext';
 import { formatTimeDigital } from '../utils/timeFormat';
 
 export const ShowerScreen = () => {
   const { config } = useSettings();
   const { phase, currentRound, timeLeft, isPlaying, setIsPlaying } = useSession();
-  const { skipPhase, stopSession } = useShowerTimer();
+  const { skipPhase, stopSession } = useTimer();
   const { t } = useTranslation();
 
   if (phase !== 'hot' && phase !== 'cold') return null;

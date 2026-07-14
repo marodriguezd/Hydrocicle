@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSettings } from '../contexts/SettingsContext';
 import { useSession } from '../contexts/SessionContext';
 import { useTranslation } from '../hooks/useTranslation';
-import { playTone } from '../hooks/useShowerTimer';
+import { playTone } from '../contexts/TimerContext';
 import { formatTimeDigital } from '../utils/timeFormat';
 
 export const ConfigScreen = () => {

@@ -5,7 +5,7 @@ import './translations.js';
 import { SettingsProvider } from './contexts/SettingsContext';
 import { SessionProvider, useSession } from './contexts/SessionContext';
 import { HistoryProvider } from './contexts/HistoryContext';
-import { useShowerTimer } from './hooks/useShowerTimer';
+import { TimerProvider } from './contexts/TimerContext';
 
 import { Header } from './components/Header';
 import { ConfigScreen } from './components/ConfigScreen';
@@ -17,9 +17,6 @@ import { SoundscapeManager } from './components/SoundscapeManager';
 const MainApp = () => {
   const { phase } = useSession();
   
-  // Mounted inside the providers to run the timer logic
-  useShowerTimer();
-
   return (
     <div className="container">
       <SoundscapeManager />
@@ -37,7 +34,9 @@ function App() {
     <SettingsProvider>
       <SessionProvider>
         <HistoryProvider>
-          <MainApp />
+          <TimerProvider>
+            <MainApp />
+          </TimerProvider>
         </HistoryProvider>
       </SessionProvider>
     </SettingsProvider>
