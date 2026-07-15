@@ -59,7 +59,7 @@ export const StatsScreen = () => {
           </p>
         ) : (
           <div className="history-list">
-            {history.slice(0, 10).map((session, idx) => {
+            {history.map((session, idx) => {
               let StatusIconComponent = Snowflake;
               let statusDotColor = '#3498db';
               

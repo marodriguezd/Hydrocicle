@@ -27,7 +27,7 @@ export const SettingsProvider = ({ children }: { children: React.ReactNode }) =>
         return {
           hotDuration: parsed.hotDuration !== undefined ? parsed.hotDuration : 120,
           coldDuration: parsed.coldDuration !== undefined ? parsed.coldDuration : 60,
-          rounds: parsed.rounds || 3,
+          rounds: parsed.rounds || 1,
           volume: parsed.volume !== undefined ? parsed.volume : 0.5,
           soundscape: parsed.soundscape || 'none',
           language: parsed.language || 'en',
@@ -41,7 +41,7 @@ export const SettingsProvider = ({ children }: { children: React.ReactNode }) =>
     return {
       hotDuration: 120,
       coldDuration: 60,
-      rounds: 3,
+      rounds: 1,
       volume: 0.5,
       soundscape: 'none',
       language: 'en',

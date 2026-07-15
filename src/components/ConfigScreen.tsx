@@ -73,7 +73,7 @@ export const ConfigScreen = () => {
     updateConfig({
       hotDuration: 120,
       coldDuration: 60,
-      rounds: 3,
+      rounds: 1,
       volume: 0.5,
       soundscape: 'none',
       preset: 'standard'
@@ -82,9 +82,9 @@ export const ConfigScreen = () => {
 
   const applyPreset = (presetName: string) => {
     if (presetName === 'standard') {
-      updateConfig({ preset: 'standard', hotDuration: 120, coldDuration: 60, rounds: 3 });
+      updateConfig({ preset: 'standard', hotDuration: 120, coldDuration: 60, rounds: 1 });
     } else if (presetName === 'extended') {
-      updateConfig({ preset: 'extended', hotDuration: 300, coldDuration: 120, rounds: 3 });
+      updateConfig({ preset: 'extended', hotDuration: 300, coldDuration: 120, rounds: 1 });
     } else if (presetName === 'coldshock') {
       updateConfig({ preset: 'coldshock', hotDuration: 0, coldDuration: 180, rounds: 1 });
     } else {
