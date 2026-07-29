@@ -25,6 +25,7 @@
 - `npx tsc` puede resolver al paquete equivocado (`tsc@2.0.4`) si `node_modules/.bin` no está en PATH. Usar `bunx tsc -b` o `npm run build` para evitarlo.
 - `SoundscapeManager` y `ConfigScreen` resuelven `${BASE_URL}assets/${soundscape}.mp3`. Si añades un nuevo sonido ambiental, el `.mp3` debe existir físicamente en `public/assets/` y el selector en `ConfigScreen.tsx` + la clave `soundscape_<key>` en `translations.js` (los 7 locales) deben estar sincronizados.
 - `localStorage` no tiene versionado de esquema. Los parseos están envueltos en `try/catch`. Cambios al esquema de `hydrocicleConfig` o `hydrocicleHistory` deben ser **aditivos** y mantener defaults seguros.
+- `playTone` en `TimerContext.tsx` utiliza una ganancia efectiva `effectiveVolume = volume * 2` (amplificación 2.0x mediante Web Audio API `GainNode`) para garantizar que los pitidos de la cuenta atrás de 5s y los cambios de fase se escuchen con suficiente volumen sobre la música de fondo.
 - `lint`/`format` no existen — `tsc -b` es la **única** compuerta automática. Compilaciones de TypeScript pasan por `tsc -b && vite build` en CI.
 
 ## Historial de cambios relevantes (resumen)

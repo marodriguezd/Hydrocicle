@@ -10,6 +10,7 @@ _Ningún pendiente._
 
 ## Hecho recientemente
 
+- **[feat]** (2026-07-29) Duplicada la ganancia (`GainNode` a 2.0x) en `playTone` ([TimerContext.tsx](file:///root/GitHub/Hydrocicle/src/contexts/TimerContext.tsx#L24-L26)) para que la cuenta atrás de 5s y las sirenas de cambio de fase se escuchen con el doble de potencia sobre música de fondo.
 - **[docs]** (2026-07-28) Creado `AGENTS.md` (anteriormente `OPENCODE.md`) en la raíz con: resumen de proyecto, comandos, convenciones, reglas para el agente y referencia explícita al knowledge base `.agents/`.
 - **[docs]** (2026-07-28) Creada estructura `.agents/` con cinco ficheros:
   - `especificaciones.md` — índice / TOC.

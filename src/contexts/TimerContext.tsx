@@ -20,8 +20,9 @@ export const playTone = (frequency: number, durationMs: number, volume: number, 
     oscillator.type = type;
     oscillator.frequency.value = frequency;
     
-    // Smooth volume ramp to avoid clicking sounds
-    gainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
+    // Double the gain (2x boost) so synthesized audio cues cut through background music
+    const effectiveVolume = volume * 2;
+    gainNode.gain.setValueAtTime(effectiveVolume, audioCtx.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + durationMs / 1000);
 
     oscillator.connect(gainNode);
