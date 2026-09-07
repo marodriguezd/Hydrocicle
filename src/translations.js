@@ -1,5 +1,5 @@
 // Translations for the Hydrocicle app
-window.translations = {
+const hydroTranslations = {
   es: {
     appTitle: "HydroCycle",
     finishBtn: "Finalizar",
@@ -365,3 +365,15 @@ window.translations = {
     stop_preview: "停止预览"
   }
 };
+
+// Export to window safely and non-destructively
+if (typeof window !== 'undefined') {
+  window.hydroTranslations = hydroTranslations;
+  window.translations = window.translations || {};
+  for (const lang of Object.keys(hydroTranslations)) {
+    window.translations[lang] = Object.assign({}, window.translations[lang] || {}, hydroTranslations[lang]);
+  }
+}
+
+export default hydroTranslations;
+
