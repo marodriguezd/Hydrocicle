@@ -39,6 +39,13 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     setRoundResults([]);
   };
 
+  React.useEffect(() => {
+    const isActive = phase === 'hot' || phase === 'cold';
+    window.dispatchEvent(new CustomEvent('omega-session-state', {
+      detail: { active: isActive, app: 'hydro' }
+    }));
+  }, [phase]);
+
   return (
     <SessionContext.Provider value={{
       phase, setPhase,

@@ -66,6 +66,10 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
   } = useSession();
 
   const intervalRef = useRef<number | null>(null);
+  const phaseStartTimeRef = useRef<number | null>(null);
+  const accumulatedPhaseMsRef = useRef<number>(0);
+  const phaseTargetSecRef = useRef<number>(0);
+  const lastWarningSecRef = useRef<number | null>(null);
   
   // Track actual seconds spent in current phase for logging
   const secondsInPhaseRef = useRef(0);
@@ -105,6 +109,8 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
   const finishSession = useCallback(() => {
     stopTimer();
     setIsPlaying(false);
+    phaseStartTimeRef.current = null;
+    accumulatedPhaseMsRef.current = 0;
     playCompletionSound();
     vibrate([500, 200, 500, 200, 1000]);
     setPhase('finished');
@@ -136,6 +142,10 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
       }
     });
 
+    accumulatedPhaseMsRef.current = 0;
+    lastWarningSecRef.current = null;
+    phaseStartTimeRef.current = Date.now();
+
     // Determine what phase is next
     if (isHot) {
       // Hot -> Cold
@@ -143,6 +153,7 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
       vibrate([300, 100, 300]);
       setPhase('cold');
       setTimeLeft(config.coldDuration);
+      phaseTargetSecRef.current = config.coldDuration;
       secondsInPhaseRef.current = 0;
     } else {
       // Cold -> Hot (Next Round) or Finish
@@ -154,9 +165,11 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
         if (config.hotDuration > 0) {
           setPhase('hot');
           setTimeLeft(config.hotDuration);
+          phaseTargetSecRef.current = config.hotDuration;
         } else {
           setPhase('cold');
           setTimeLeft(config.coldDuration);
+          phaseTargetSecRef.current = config.coldDuration;
         }
         secondsInPhaseRef.current = 0;
       } else {
@@ -171,19 +184,22 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     setIsPlaying(true);
     setCurrentRound(1);
     secondsInPhaseRef.current = 0;
+    accumulatedPhaseMsRef.current = 0;
+    lastWarningSecRef.current = null;
 
-    if (config.hotDuration > 0) {
-      setPhase('hot');
-      setTimeLeft(config.hotDuration);
-    } else {
-      setPhase('cold');
-      setTimeLeft(config.coldDuration);
-    }
+    const initialPhase = config.hotDuration > 0 ? 'hot' : 'cold';
+    const initialDuration = initialPhase === 'hot' ? config.hotDuration : config.coldDuration;
+    phaseTargetSecRef.current = initialDuration;
+    setPhase(initialPhase);
+    setTimeLeft(initialDuration);
+    phaseStartTimeRef.current = Date.now();
   };
 
   const stopSession = () => {
     stopTimer();
     setIsPlaying(false);
+    phaseStartTimeRef.current = null;
+    accumulatedPhaseMsRef.current = 0;
     resetSession();
   };
 
@@ -191,27 +207,35 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     transitionToNext();
   };
 
-  // Timer tick
+  // High-precision timer tick
   useEffect(() => {
     if (isPlaying && (phase === 'hot' || phase === 'cold')) {
-      secondsInPhaseRef.current = 0;
-      
+      phaseStartTimeRef.current = Date.now();
+
       intervalRef.current = window.setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev > 0) {
-            const nextVal = prev - 1;
-            secondsInPhaseRef.current += 1;
-            
-            // Sound warnings during last 5 seconds
-            if (nextVal <= 5 && nextVal > 0) {
-              playWarningBeep();
-              vibrate(100);
-            }
-            return nextVal;
-          }
-          return 0;
-        });
-      }, 1000);
+        if (!phaseStartTimeRef.current) return;
+        const now = Date.now();
+        const currentPhaseMs = accumulatedPhaseMsRef.current + (now - phaseStartTimeRef.current);
+        const elapsedSec = Math.floor(currentPhaseMs / 1000);
+        const remaining = Math.max(0, phaseTargetSecRef.current - elapsedSec);
+
+        secondsInPhaseRef.current = elapsedSec;
+        setTimeLeft(remaining);
+
+        // Sound warnings during last 5 seconds (5, 4, 3, 2, 1)
+        if (remaining <= 5 && remaining > 0 && remaining !== lastWarningSecRef.current) {
+          lastWarningSecRef.current = remaining;
+          playWarningBeep();
+          vibrate(100);
+        }
+      }, 200);
+    } else {
+      // When paused: accumulate elapsed time and clear active interval
+      if (phaseStartTimeRef.current) {
+        accumulatedPhaseMsRef.current += Date.now() - phaseStartTimeRef.current;
+        phaseStartTimeRef.current = null;
+      }
+      stopTimer();
     }
 
     return () => stopTimer();

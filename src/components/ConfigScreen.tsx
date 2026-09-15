@@ -41,7 +41,8 @@ export const ConfigScreen = () => {
         testSoundscapeRef.current.loop = true;
       }
       const baseUrl = import.meta.env.BASE_URL || '/';
-      const src = `${baseUrl}assets/${config.soundscape}.mp3`;
+      const trackFile = config.soundscape === 'wind' ? 'whitenoise' : config.soundscape;
+      const src = `${baseUrl}assets/${trackFile}.mp3`;
       if (testSoundscapeRef.current.src !== src) {
         testSoundscapeRef.current.src = src;
       }
@@ -106,10 +107,14 @@ export const ConfigScreen = () => {
   return (
     <div id="configScreen" className="screen active">
       {/* Dynamic Visual Preview Hexagon */}
-      <div className="hexagon-container">
+      <div className="breathing-sphere-container hexagon-container">
         <div 
-          className={`hexagon phase-${config.hotDuration === 0 ? 'cold' : previewPhase}`}
-          style={{ transform: 'scale(1.1)', transition: 'all 1s ease' }}
+          className={`breathing-sphere hexagon phase-${config.hotDuration === 0 ? 'cold' : previewPhase}`}
+          style={{ 
+            transform: 'scale(1.1) translateZ(0)', 
+            transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)',
+            willChange: 'transform'
+          }}
         >
           <div className="breath-counter">
             {config.hotDuration === 0 ? <Snowflake size={48} color="white" /> : previewPhase === 'hot' ? <Flame size={48} color="white" /> : <Snowflake size={48} color="white" />}

@@ -26,7 +26,7 @@ export const ShowerScreen = () => {
 
   // Render a visual SVG border indicator that rotates/pulses around the hexagon
   return (
-    <div id="exerciseScreen" className="screen active" style={{ justifyContent: 'space-evenly' }}>
+    <div id="exerciseScreen" className="screen active shower-screen" style={{ justifyContent: 'space-evenly' }}>
       <div className="round-info">
         {t('roundInfo', { current: currentRound, total: config.rounds })}
       </div>
@@ -35,14 +35,12 @@ export const ShowerScreen = () => {
         {isHot ? t('hotPhase') : t('coldPhase')}
       </div>
 
-      <div className="hexagon-container" style={{ margin: '1.5rem auto' }}>
+      <div className="breathing-sphere-container hexagon-container" style={{ margin: '1.5rem auto' }}>
         <div 
-          className={`hexagon phase-${phase} ${isPlaying ? 'pulsing' : ''}`}
+          className={`breathing-sphere hexagon phase-${phase} ${isPlaying ? 'pulsing' : ''}`}
           style={{
-            transform: isPlaying ? 'scale(1.05)' : 'scale(1.0)',
-            transition: 'transform 1s ease-in-out infinite alternate',
-            width: '10rem',
-            height: '8.6rem'
+            width: '9.375rem',
+            height: '9.375rem'
           }}
         >
           <div className="breath-counter" style={{ fontSize: '3.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
