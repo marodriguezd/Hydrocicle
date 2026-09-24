@@ -42,9 +42,19 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
   React.useEffect(() => {
     const isActive = phase === 'hot' || phase === 'cold';
     window.dispatchEvent(new CustomEvent('omega-session-state', {
-      detail: { active: isActive, app: 'hydro' }
+      detail: { active: isActive, isPlaying, app: 'hydro' }
     }));
-  }, [phase]);
+  }, [phase, isPlaying]);
+
+  React.useEffect(() => {
+    const handlePauseSession = (e: any) => {
+      if (e.detail?.pause) {
+        setIsPlaying(false);
+      }
+    };
+    window.addEventListener('omega-pause-session', handlePauseSession);
+    return () => window.removeEventListener('omega-pause-session', handlePauseSession);
+  }, []);
 
   return (
     <SessionContext.Provider value={{

@@ -32,6 +32,8 @@ export const HistoryProvider = ({ children }: { children: React.ReactNode }) => 
 
   useEffect(() => {
     localStorage.setItem('hydrocicleHistory', JSON.stringify(history));
+    window.dispatchEvent(new CustomEvent('subapp-sync', { detail: { type: 'history', app: 'hydro' } }));
+    window.dispatchEvent(new CustomEvent('omega-sync'));
     
     // Calculate streaks
     if (history.length === 0) {

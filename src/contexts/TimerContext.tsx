@@ -1,6 +1,11 @@
 import React, { createContext, useContext, useEffect, useRef, useCallback } from 'react';
 import { useSession, RoundResult } from './SessionContext';
 import { useSettings } from './SettingsContext';
+import {
+  playTransitionCue,
+  playCompletionFanfare,
+  playCountdownBeep
+} from '../services/zenAudioService';
 
 let audioCtx: AudioContext | null = null;
 
@@ -80,23 +85,16 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     currentRoundResultsRef.current = roundResults;
   }, [roundResults]);
 
-  const playTransitionSound = useCallback(() => {
-    // Siren-like transition tone using square wave
-    const baseFreq = 880; // A5
-    playTone(baseFreq, 300, config.volume, 'square');
-    setTimeout(() => playTone(baseFreq * 0.8, 300, config.volume, 'square'), 120);
+  const playTransitionSound = useCallback((targetPhase: 'hot' | 'cold') => {
+    playTransitionCue(targetPhase, config.volume);
   }, [config.volume]);
 
   const playCompletionSound = useCallback(() => {
-    // Fanfare arpeggio
-    const freqs = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
-    freqs.forEach((freq, i) => {
-      setTimeout(() => playTone(freq, i === 3 ? 800 : 200, config.volume, 'sine'), i * 150);
-    });
+    playCompletionFanfare(config.volume);
   }, [config.volume]);
 
-  const playWarningBeep = useCallback(() => {
-    playTone(587.33, 150, config.volume, 'sine'); // D5 warning beep
+  const playWarningBeep = useCallback((secRemaining: number) => {
+    playCountdownBeep(config.volume, secRemaining);
   }, [config.volume]);
 
   const stopTimer = useCallback(() => {
@@ -149,7 +147,7 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     // Determine what phase is next
     if (isHot) {
       // Hot -> Cold
-      playTransitionSound();
+      playTransitionSound('cold');
       vibrate([300, 100, 300]);
       setPhase('cold');
       setTimeLeft(config.coldDuration);
@@ -158,7 +156,7 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     } else {
       // Cold -> Hot (Next Round) or Finish
       if (currentRound < config.rounds) {
-        playTransitionSound();
+        playTransitionSound('hot');
         vibrate([300, 100, 300]);
         setCurrentRound(r => r + 1);
         
@@ -225,7 +223,7 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
         // Sound warnings during last 5 seconds (5, 4, 3, 2, 1)
         if (remaining <= 5 && remaining > 0 && remaining !== lastWarningSecRef.current) {
           lastWarningSecRef.current = remaining;
-          playWarningBeep();
+          playWarningBeep(remaining);
           vibrate(100);
         }
       }, 200);

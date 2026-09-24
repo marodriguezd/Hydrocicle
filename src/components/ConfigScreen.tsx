@@ -4,6 +4,7 @@ import { useSession } from '../contexts/SessionContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { playTone } from '../contexts/TimerContext';
 import { formatTimeDigital } from '../utils/timeFormat';
+import { BreathingSphere } from './BreathingSphere';
 import { Flame, Snowflake, VolumeX, CloudRain, Waves, Wind, Square, Play } from 'lucide-react';
 
 export const ConfigScreen = () => {
@@ -107,20 +108,13 @@ export const ConfigScreen = () => {
   return (
     <div id="configScreen" className="screen active">
       {/* Dynamic Visual Preview Hexagon */}
-      <div className="breathing-sphere-container hexagon-container">
-        <div 
-          className={`breathing-sphere hexagon phase-${config.hotDuration === 0 ? 'cold' : previewPhase}`}
-          style={{ 
-            transform: 'scale(1.1) translateZ(0)', 
-            transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)',
-            willChange: 'transform'
-          }}
-        >
-          <div className="breath-counter">
-            {config.hotDuration === 0 ? <Snowflake size={48} color="white" /> : previewPhase === 'hot' ? <Flame size={48} color="white" /> : <Snowflake size={48} color="white" />}
-          </div>
-        </div>
-      </div>
+      <BreathingSphere
+        phase={config.hotDuration === 0 ? 'cold' : previewPhase}
+        scale={1.1}
+        durationMs={1000}
+        easing="cubic-bezier(0.4, 0, 0.2, 1)"
+        icon={config.hotDuration === 0 ? <Snowflake size={48} color="white" /> : previewPhase === 'hot' ? <Flame size={48} color="white" /> : <Snowflake size={48} color="white" />}
+      />
       <div className="preview-label">{t('previewLabel')}</div>
 
       {/* Preset Selector */}
