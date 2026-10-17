@@ -8,13 +8,17 @@ export interface SessionHistory {
   coldDuration: number;
   totalColdTime: number;
   totalTime: number;
+  waterTemp?: number;
+  tempUnit?: 'C' | 'F';
+  sensations?: string[];
 }
 
 export interface HistoryState {
   history: SessionHistory[];
   currentStreak: number;
   longestStreak: number;
-  addSession: (session: Omit<SessionHistory, 'id' | 'date'>) => void;
+  addSession: (session: Omit<SessionHistory, 'id' | 'date'>) => string;
+  updateSession: (id: string, updates: Partial<SessionHistory>) => void;
   removeSession: (id: string) => void;
   clearHistory: () => void;
 }
@@ -80,13 +84,34 @@ export const HistoryProvider = ({ children }: { children: React.ReactNode }) => 
 
   }, [history]);
 
-  const addSession = (session: Omit<SessionHistory, 'id' | 'date'>) => {
+  const addSession = (session: Omit<SessionHistory, 'id' | 'date'>): string => {
+    const id = Date.now().toString();
     const newSession: SessionHistory = {
       ...session,
-      id: Date.now().toString(),
+      id,
       date: new Date().toISOString(),
     };
     setHistory(prev => [newSession, ...prev]);
+    return id;
+  };
+
+  const updateSession = (id: string, updates: Partial<SessionHistory>) => {
+    setHistory(prev => {
+      const updated = prev.map(s => s.id === id ? { ...s, ...updates } : s);
+      try {
+        const store = JSON.parse(localStorage.getItem('omega_wimhof_store') || '{}');
+        if (store.coldHistory) {
+          const match = store.coldHistory.find((c: any) => c.id === id || c.id === `hc-${id}`);
+          if (match) {
+            if (updates.waterTemp !== undefined) match.waterTemp = updates.waterTemp;
+            if (updates.tempUnit !== undefined) match.tempUnit = updates.tempUnit;
+            localStorage.setItem('omega_wimhof_store', JSON.stringify(store));
+            window.dispatchEvent(new CustomEvent('omega-store-update'));
+          }
+        }
+      } catch (e) {}
+      return updated;
+    });
   };
 
   const removeSession = (id: string) => {
@@ -100,7 +125,7 @@ export const HistoryProvider = ({ children }: { children: React.ReactNode }) => 
   };
 
   return (
-    <HistoryContext.Provider value={{ history, currentStreak, longestStreak, addSession, removeSession, clearHistory }}>
+    <HistoryContext.Provider value={{ history, currentStreak, longestStreak, addSession, updateSession, removeSession, clearHistory }}>
       {children}
     </HistoryContext.Provider>
   );

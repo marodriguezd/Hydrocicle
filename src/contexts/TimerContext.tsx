@@ -4,7 +4,8 @@ import { useSettings } from './SettingsContext';
 import {
   playTransitionCue,
   playCompletionFanfare,
-  playCountdownBeep
+  playCountdownBeep,
+  playWaterMilestoneCue
 } from '../services/zenAudioService';
 
 let audioCtx: AudioContext | null = null;
@@ -75,6 +76,7 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
   const accumulatedPhaseMsRef = useRef<number>(0);
   const phaseTargetSecRef = useRef<number>(0);
   const lastWarningSecRef = useRef<number | null>(null);
+  const lastMilestoneSecRef = useRef<number | null>(null);
   
   // Track actual seconds spent in current phase for logging
   const secondsInPhaseRef = useRef(0);
@@ -142,6 +144,7 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
 
     accumulatedPhaseMsRef.current = 0;
     lastWarningSecRef.current = null;
+    lastMilestoneSecRef.current = null;
     phaseStartTimeRef.current = Date.now();
 
     // Determine what phase is next
@@ -184,6 +187,7 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     secondsInPhaseRef.current = 0;
     accumulatedPhaseMsRef.current = 0;
     lastWarningSecRef.current = null;
+    lastMilestoneSecRef.current = null;
 
     const initialPhase = config.hotDuration > 0 ? 'hot' : 'cold';
     const initialDuration = initialPhase === 'hot' ? config.hotDuration : config.coldDuration;
@@ -198,6 +202,7 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     setIsPlaying(false);
     phaseStartTimeRef.current = null;
     accumulatedPhaseMsRef.current = 0;
+    lastMilestoneSecRef.current = null;
     resetSession();
   };
 
@@ -219,6 +224,18 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
 
         secondsInPhaseRef.current = elapsedSec;
         setTimeLeft(remaining);
+
+        // Acoustic water milestone chimes at 15s, 30s, 45s, 60s, and every 30s beyond during cold phase
+        if (
+          phase === 'cold' &&
+          (elapsedSec === 15 || elapsedSec === 30 || elapsedSec === 45 || elapsedSec === 60 || (elapsedSec > 60 && elapsedSec % 30 === 0)) &&
+          elapsedSec !== lastMilestoneSecRef.current &&
+          remaining > 5
+        ) {
+          lastMilestoneSecRef.current = elapsedSec;
+          playWaterMilestoneCue(config.volume, elapsedSec);
+          vibrate([150, 100, 250]);
+        }
 
         // Sound warnings during last 5 seconds (5, 4, 3, 2, 1)
         if (remaining <= 5 && remaining > 0 && remaining !== lastWarningSecRef.current) {
