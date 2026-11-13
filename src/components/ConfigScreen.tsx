@@ -12,17 +12,8 @@ export const ConfigScreen = () => {
   const { setPhase, setCurrentRound, setTimeLeft, setIsPlaying } = useSession();
   const { t } = useTranslation();
 
-  const [previewPhase, setPreviewPhase] = useState<'hot' | 'cold'>('hot');
   const [testingSoundscape, setTestingSoundscape] = useState<boolean>(false);
   const testSoundscapeRef = useRef<HTMLAudioElement | null>(null);
-
-  // Preview phase switching animation
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPreviewPhase(prev => (prev === 'hot' ? 'cold' : 'hot'));
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Clean up soundscape test audio on unmount
   useEffect(() => {
@@ -107,13 +98,13 @@ export const ConfigScreen = () => {
 
   return (
     <div id="configScreen" className="screen active">
-      {/* Dynamic Visual Preview Hexagon */}
+      {/* Dynamic Visual Preview Hexagon - Cold ice crystal aesthetic */}
       <BreathingSphere
-        phase={config.hotDuration === 0 ? 'cold' : previewPhase}
+        phase="cold"
         scale={1.1}
         durationMs={1000}
         easing="cubic-bezier(0.4, 0, 0.2, 1)"
-        icon={config.hotDuration === 0 ? <Snowflake size={48} color="white" /> : previewPhase === 'hot' ? <Flame size={48} color="white" /> : <Snowflake size={48} color="white" />}
+        icon={<Snowflake size={48} color="white" />}
       />
       <div className="preview-label">{t('previewLabel')}</div>
 
@@ -165,6 +156,7 @@ export const ConfigScreen = () => {
                 max="600" 
                 step="30"
                 value={config.hotDuration}
+                style={{ '--slider-fill': `${Math.round((config.hotDuration / 600) * 100)}%` } as React.CSSProperties}
                 onChange={(e) => updateConfig({ hotDuration: parseInt(e.target.value), preset: 'custom' })}
                 className="slider"
               />
@@ -181,6 +173,7 @@ export const ConfigScreen = () => {
                 max="600" 
                 step="15"
                 value={config.coldDuration}
+                style={{ '--slider-fill': `${Math.round(((config.coldDuration - 15) / (600 - 15)) * 100)}%` } as React.CSSProperties}
                 onChange={(e) => updateConfig({ coldDuration: parseInt(e.target.value), preset: 'custom' })}
                 className="slider"
               />
@@ -197,6 +190,7 @@ export const ConfigScreen = () => {
                 max="10" 
                 step="1"
                 value={config.rounds}
+                style={{ '--slider-fill': `${Math.round(((config.rounds - 1) / (10 - 1)) * 100)}%` } as React.CSSProperties}
                 onChange={(e) => updateConfig({ rounds: parseInt(e.target.value), preset: 'custom' })}
                 className="slider"
               />
@@ -274,6 +268,7 @@ export const ConfigScreen = () => {
             max="1" 
             step="0.05"
             value={config.volume}
+            style={{ '--slider-fill': `${Math.round(config.volume * 100)}%` } as React.CSSProperties}
             onChange={(e) => updateConfig({ volume: parseFloat(e.target.value) })}
             className="slider"
           />
