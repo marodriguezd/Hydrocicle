@@ -5,7 +5,8 @@ import {
   playTransitionCue,
   playCompletionFanfare,
   playCountdownBeep,
-  playWaterMilestoneCue
+  playWaterMilestoneCue,
+  triggerHaptic
 } from '../services/zenAudioService';
 
 let audioCtx: AudioContext | null = null;
@@ -42,13 +43,7 @@ export const playTone = (frequency: number, durationMs: number, volume: number, 
 };
 
 export const vibrate = (pattern: number | number[]) => {
-  if (typeof navigator !== 'undefined' && navigator.vibrate) {
-    try {
-      navigator.vibrate(pattern);
-    } catch (e) {
-      console.warn('Vibration not supported or blocked:', e);
-    }
-  }
+  triggerHaptic('medium', pattern).catch(() => {});
 };
 
 interface TimerState {
