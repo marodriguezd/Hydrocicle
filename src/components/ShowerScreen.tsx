@@ -139,25 +139,25 @@ export const ShowerScreen = () => {
       <div className="controls-panel" style={{ marginTop: '0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
         <button 
           className="control-btn" 
-          title="Reiniciar"
+          title={t('resetSessionLabel')}
           onClick={stopSession}
-          aria-label="Reiniciar sesión"
+          aria-label={t('resetSessionLabel')}
         >
           <RotateCcw size={22} />
         </button>
         <button 
           className="control-btn primary-btn" 
           onClick={handlePlayPause}
-          title={isPlaying ? 'Pausa' : 'Reanudar'}
-          aria-label={isPlaying ? 'Pausa' : 'Reanudar'}
+          title={isPlaying ? t('pauseLabel') : t('resumeLabel')}
+          aria-label={isPlaying ? t('pauseLabel') : t('resumeLabel')}
         >
           {isPlaying ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" />}
         </button>
         <button 
           className="control-btn" 
-          title="Saltar fase"
+          title={t('skipPhaseLabel')}
           onClick={skipPhase}
-          aria-label="Saltar fase"
+          aria-label={t('skipPhaseLabel')}
         >
           <SkipForward size={22} />
         </button>

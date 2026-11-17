@@ -54,7 +54,11 @@ const hydroTranslations = {
     test_soundscape: "Probar Ambiente",
     stop_preview: "Detener Sonido",
     roundInfo: "Ronda {current} / {total}",
-    roundLabel: "Ronda {round}"
+    roundLabel: "Ronda {round}",
+    resetSessionLabel: "Reiniciar sesión",
+    pauseLabel: "Pausa",
+    resumeLabel: "Reanudar",
+    skipPhaseLabel: "Saltar fase"
   },
   en: {
     appTitle: "HydroCycle",
@@ -110,7 +114,11 @@ const hydroTranslations = {
     test_soundscape: "Test Ambient",
     stop_preview: "Stop Preview",
     roundInfo: "Round {current} / {total}",
-    roundLabel: "Round {round}"
+    roundLabel: "Round {round}",
+    resetSessionLabel: "Reset session",
+    pauseLabel: "Pause",
+    resumeLabel: "Resume",
+    skipPhaseLabel: "Skip phase"
   },
   fr: {
     appTitle: "HydroCycle",
@@ -166,7 +174,11 @@ const hydroTranslations = {
     waterTempOptional: "Température de l'eau (optionnel)",
     clearTemp: "Effacer la température",
     roundInfo: "Cycle {current} / {total}",
-    roundLabel: "Cycle {round}"
+    roundLabel: "Cycle {round}",
+    resetSessionLabel: "Réinitialiser la séance",
+    pauseLabel: "Pause",
+    resumeLabel: "Reprendre",
+    skipPhaseLabel: "Passer la phase"
   },
   it: {
     appTitle: "HydroCycle",
@@ -222,7 +234,11 @@ const hydroTranslations = {
     waterTempOptional: "Temperatura dell'acqua (opzionale)",
     clearTemp: "Cancella temperatura",
     roundInfo: "Giro {current} / {total}",
-    roundLabel: "Giro {round}"
+    roundLabel: "Giro {round}",
+    resetSessionLabel: "Ripristina sessione",
+    pauseLabel: "Pausa",
+    resumeLabel: "Riprendi",
+    skipPhaseLabel: "Salta fase"
   },
   de: {
     appTitle: "HydroCycle",
@@ -278,7 +294,11 @@ const hydroTranslations = {
     waterTempOptional: "Wassertemperatur (optional)",
     clearTemp: "Temperatur löschen",
     roundInfo: "Runde {current} / {total}",
-    roundLabel: "Runde {round}"
+    roundLabel: "Runde {round}",
+    resetSessionLabel: "Sitzung zurücksetzen",
+    pauseLabel: "Pause",
+    resumeLabel: "Fortsetzen",
+    skipPhaseLabel: "Phase überspringen"
   },
   pt: {
     appTitle: "HydroCycle",
@@ -334,7 +354,11 @@ const hydroTranslations = {
     waterTempOptional: "Temperatura da água (opcional)",
     clearTemp: "Limpar temperatura",
     roundInfo: "Rodada {current} / {total}",
-    roundLabel: "Rodada {round}"
+    roundLabel: "Rodada {round}",
+    resetSessionLabel: "Reiniciar sessão",
+    pauseLabel: "Pausa",
+    resumeLabel: "Retomar",
+    skipPhaseLabel: "Pular fase"
   },
   zh: {
     appTitle: "HydroCycle",
@@ -390,7 +414,11 @@ const hydroTranslations = {
     waterTempOptional: "水温（可选）",
     clearTemp: "清除温度",
     roundInfo: "第 {current} / {total} 轮",
-    roundLabel: "第 {round} 轮"
+    roundLabel: "第 {round} 轮",
+    resetSessionLabel: "重置会话",
+    pauseLabel: "暂停",
+    resumeLabel: "继续",
+    skipPhaseLabel: "跳过阶段"
   }
 };
 
