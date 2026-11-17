@@ -52,7 +52,9 @@ const hydroTranslations = {
     soundscape_wind: "Viento",
     test_tone: "Probar Pitido",
     test_soundscape: "Probar Ambiente",
-    stop_preview: "Detener Sonido"
+    stop_preview: "Detener Sonido",
+    roundInfo: "Ronda {current} / {total}",
+    roundLabel: "Ronda {round}"
   },
   en: {
     appTitle: "HydroCycle",
@@ -106,7 +108,9 @@ const hydroTranslations = {
     soundscape_wind: "Wind",
     test_tone: "Test Tone",
     test_soundscape: "Test Ambient",
-    stop_preview: "Stop Preview"
+    stop_preview: "Stop Preview",
+    roundInfo: "Round {current} / {total}",
+    roundLabel: "Round {round}"
   },
   fr: {
     appTitle: "HydroCycle",
@@ -158,7 +162,11 @@ const hydroTranslations = {
     soundscape_wind: "Vent",
     test_tone: "Tester la tonalité",
     test_soundscape: "Tester l'ambiance",
-    stop_preview: "Arrêter l'aperçu"
+    stop_preview: "Arrêter l'aperçu",
+    waterTempOptional: "Température de l'eau (optionnel)",
+    clearTemp: "Effacer la température",
+    roundInfo: "Cycle {current} / {total}",
+    roundLabel: "Cycle {round}"
   },
   it: {
     appTitle: "HydroCycle",
@@ -210,7 +218,11 @@ const hydroTranslations = {
     soundscape_wind: "Vento",
     test_tone: "Prova tono",
     test_soundscape: "Prova ambiente",
-    stop_preview: "Ferma anteprima"
+    stop_preview: "Ferma anteprima",
+    waterTempOptional: "Temperatura dell'acqua (opzionale)",
+    clearTemp: "Cancella temperatura",
+    roundInfo: "Giro {current} / {total}",
+    roundLabel: "Giro {round}"
   },
   de: {
     appTitle: "HydroCycle",
@@ -262,7 +274,11 @@ const hydroTranslations = {
     soundscape_wind: "Wind",
     test_tone: "Ton testen",
     test_soundscape: "Hintergrund testen",
-    stop_preview: "Vorschau stoppen"
+    stop_preview: "Vorschau stoppen",
+    waterTempOptional: "Wassertemperatur (optional)",
+    clearTemp: "Temperatur löschen",
+    roundInfo: "Runde {current} / {total}",
+    roundLabel: "Runde {round}"
   },
   pt: {
     appTitle: "HydroCycle",
@@ -314,7 +330,11 @@ const hydroTranslations = {
     soundscape_wind: "Vento",
     test_tone: "Testar tom",
     test_soundscape: "Testar ambiente",
-    stop_preview: "Parar som"
+    stop_preview: "Parar som",
+    waterTempOptional: "Temperatura da água (opcional)",
+    clearTemp: "Limpar temperatura",
+    roundInfo: "Rodada {current} / {total}",
+    roundLabel: "Rodada {round}"
   },
   zh: {
     appTitle: "HydroCycle",
@@ -366,7 +386,11 @@ const hydroTranslations = {
     soundscape_wind: "风声",
     test_tone: "测试提示音",
     test_soundscape: "测试背景音",
-    stop_preview: "停止预览"
+    stop_preview: "停止预览",
+    waterTempOptional: "水温（可选）",
+    clearTemp: "清除温度",
+    roundInfo: "第 {current} / {total} 轮",
+    roundLabel: "第 {round} 轮"
   }
 };
 
