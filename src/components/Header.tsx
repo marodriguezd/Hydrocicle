@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSession } from '../contexts/SessionContext';
 import { useSettings } from '../contexts/SettingsContext';
+import { useTimer } from '../contexts/TimerContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { Sun, Moon } from 'lucide-react';
 
@@ -16,7 +17,8 @@ const LANGUAGES = [
 
 export const Header = () => {
   const { config, updateConfig } = useSettings();
-  const { phase, setPhase, currentRound, timeLeft, setIsPlaying } = useSession();
+  const { phase, currentRound, timeLeft } = useSession();
+  const { finishSessionEarly } = useTimer();
   const { t } = useTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -101,10 +103,7 @@ export const Header = () => {
       </button>
       <button 
         className={`finish-btn ${(phase !== 'hot' && phase !== 'cold') ? 'hidden' : ''}`} 
-        onClick={() => {
-          setIsPlaying(false);
-          setPhase('finished');
-        }}
+        onClick={finishSessionEarly}
       >
         {t('finishBtn')}
       </button>

@@ -39,7 +39,9 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     setRoundResults([]);
   };
 
+  const phaseRef = React.useRef<SessionPhase>(phase);
   React.useEffect(() => {
+    phaseRef.current = phase;
     const isActive = phase === 'hot' || phase === 'cold';
     window.dispatchEvent(new CustomEvent('omega-session-state', {
       detail: { active: isActive, isPlaying, app: 'hydro' }
@@ -48,8 +50,14 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
   React.useEffect(() => {
     const handlePauseSession = (e: any) => {
-      if (e.detail?.pause) {
-        setIsPlaying(false);
+      if (e.detail?.exit) {
+        resetSession();
+      } else if (typeof e.detail?.pause === 'boolean') {
+        if (e.detail.pause) {
+          setIsPlaying(false);
+        } else if (phaseRef.current === 'hot' || phaseRef.current === 'cold') {
+          setIsPlaying(true);
+        }
       }
     };
     window.addEventListener('omega-pause-session', handlePauseSession);

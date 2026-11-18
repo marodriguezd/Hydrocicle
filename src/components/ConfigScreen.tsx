@@ -2,14 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSettings } from '../contexts/SettingsContext';
 import { useSession } from '../contexts/SessionContext';
 import { useTranslation } from '../hooks/useTranslation';
-import { playTone } from '../contexts/TimerContext';
+import { playTone, useTimer } from '../contexts/TimerContext';
 import { formatTimeDigital } from '../utils/timeFormat';
 import { BreathingSphere } from './BreathingSphere';
 import { Flame, Snowflake, VolumeX, CloudRain, Waves, Wind, Square, Play } from 'lucide-react';
 
 export const ConfigScreen = () => {
   const { config, updateConfig } = useSettings();
-  const { setPhase, setCurrentRound, setTimeLeft, setIsPlaying } = useSession();
+  const { setPhase } = useSession();
+  const { startSession } = useTimer();
   const { t } = useTranslation();
 
   const [testingSoundscape, setTestingSoundscape] = useState<boolean>(false);
@@ -49,16 +50,7 @@ export const ConfigScreen = () => {
 
   const handleStart = () => {
     setTestingSoundscape(false);
-    setIsPlaying(true);
-    setCurrentRound(1);
-    
-    if (config.hotDuration > 0) {
-      setPhase('hot');
-      setTimeLeft(config.hotDuration);
-    } else {
-      setPhase('cold');
-      setTimeLeft(config.coldDuration);
-    }
+    startSession();
   };
 
   const handleResetConfig = () => {

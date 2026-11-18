@@ -50,6 +50,7 @@ interface TimerState {
   startSession: () => void;
   stopSession: () => void;
   skipPhase: () => void;
+  finishSessionEarly: () => void;
   playTone: (frequency: number, durationMs: number, volume: number, type?: OscillatorType) => void;
 }
 
@@ -111,12 +112,13 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     setPhase('finished');
   }, [setPhase, setIsPlaying, playCompletionSound, stopTimer]);
 
-  const transitionToNext = useCallback(() => {
+  const transitionToNext = useCallback((completedNaturally = false) => {
     stopTimer();
     
-    // Save duration of the completed phase into roundResults
     const isHot = phase === 'hot';
-    const durationLogged = secondsInPhaseRef.current;
+    const durationLogged = completedNaturally
+      ? phaseTargetSecRef.current
+      : Math.min(phaseTargetSecRef.current, secondsInPhaseRef.current);
     
     setRoundResults(prev => {
       const existIdx = prev.findIndex(r => r.round === currentRound);
@@ -140,11 +142,9 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     accumulatedPhaseMsRef.current = 0;
     lastWarningSecRef.current = null;
     lastMilestoneSecRef.current = null;
-    phaseStartTimeRef.current = Date.now();
+    phaseStartTimeRef.current = performance.now();
 
-    // Determine what phase is next
     if (isHot) {
-      // Hot -> Cold
       playTransitionSound('cold');
       vibrate([300, 100, 300]);
       setPhase('cold');
@@ -152,7 +152,6 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
       phaseTargetSecRef.current = config.coldDuration;
       secondsInPhaseRef.current = 0;
     } else {
-      // Cold -> Hot (Next Round) or Finish
       if (currentRound < config.rounds) {
         playTransitionSound('hot');
         vibrate([300, 100, 300]);
@@ -169,7 +168,6 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
         }
         secondsInPhaseRef.current = 0;
       } else {
-        // Last round cold finished -> Session finished
         finishSession();
       }
     }
@@ -189,7 +187,7 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     phaseTargetSecRef.current = initialDuration;
     setPhase(initialPhase);
     setTimeLeft(initialDuration);
-    phaseStartTimeRef.current = Date.now();
+    phaseStartTimeRef.current = performance.now();
   };
 
   const stopSession = () => {
@@ -197,30 +195,60 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
     setIsPlaying(false);
     phaseStartTimeRef.current = null;
     accumulatedPhaseMsRef.current = 0;
+    phaseTargetSecRef.current = 0;
+    secondsInPhaseRef.current = 0;
     lastMilestoneSecRef.current = null;
     resetSession();
   };
 
   const skipPhase = () => {
-    transitionToNext();
+    transitionToNext(false);
   };
 
-  // High-precision timer tick
+  const finishSessionEarly = useCallback(() => {
+    if (phase === 'hot' || phase === 'cold') {
+      const isHot = phase === 'hot';
+      const durationLogged = Math.min(phaseTargetSecRef.current, secondsInPhaseRef.current);
+      if (durationLogged > 0) {
+        setRoundResults(prev => {
+          const existIdx = prev.findIndex(r => r.round === currentRound);
+          if (existIdx >= 0) {
+            const updated = [...prev];
+            updated[existIdx] = {
+              ...updated[existIdx],
+              hotDuration: isHot ? durationLogged : updated[existIdx].hotDuration,
+              coldDuration: !isHot ? durationLogged : updated[existIdx].coldDuration,
+            };
+            return updated;
+          }
+          return [...prev, {
+            round: currentRound,
+            hotDuration: isHot ? durationLogged : 0,
+            coldDuration: !isHot ? durationLogged : 0,
+          }];
+        });
+      }
+    }
+    finishSession();
+  }, [phase, currentRound, setRoundResults, finishSession]);
+
   useEffect(() => {
     if (isPlaying && (phase === 'hot' || phase === 'cold')) {
-      phaseStartTimeRef.current = Date.now();
+      if (phaseTargetSecRef.current <= 0) {
+        phaseTargetSecRef.current = phase === 'hot' ? config.hotDuration : config.coldDuration;
+      }
+      phaseStartTimeRef.current = performance.now();
 
       intervalRef.current = window.setInterval(() => {
         if (!phaseStartTimeRef.current) return;
-        const now = Date.now();
+        const now = performance.now();
         const currentPhaseMs = accumulatedPhaseMsRef.current + (now - phaseStartTimeRef.current);
         const elapsedSec = Math.floor(currentPhaseMs / 1000);
         const remaining = Math.max(0, phaseTargetSecRef.current - elapsedSec);
 
-        secondsInPhaseRef.current = elapsedSec;
+        secondsInPhaseRef.current = Math.min(phaseTargetSecRef.current, elapsedSec);
         setTimeLeft(remaining);
 
-        // Acoustic water milestone chimes at 15s, 30s, 45s, 60s, and every 30s beyond during cold phase
         if (
           phase === 'cold' &&
           (elapsedSec === 15 || elapsedSec === 30 || elapsedSec === 45 || elapsedSec === 60 || (elapsedSec > 60 && elapsedSec % 30 === 0)) &&
@@ -232,7 +260,6 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
           vibrate([150, 100, 250]);
         }
 
-        // Sound warnings during last 5 seconds (5, 4, 3, 2, 1)
         if (remaining <= 5 && remaining > 0 && remaining !== lastWarningSecRef.current) {
           lastWarningSecRef.current = remaining;
           playWarningBeep(remaining);
@@ -240,26 +267,24 @@ export const TimerProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }, 200);
     } else {
-      // When paused: accumulate elapsed time and clear active interval
       if (phaseStartTimeRef.current) {
-        accumulatedPhaseMsRef.current += Date.now() - phaseStartTimeRef.current;
+        accumulatedPhaseMsRef.current += performance.now() - phaseStartTimeRef.current;
         phaseStartTimeRef.current = null;
       }
       stopTimer();
     }
 
     return () => stopTimer();
-  }, [isPlaying, phase, playWarningBeep, stopTimer, setTimeLeft]);
+  }, [isPlaying, phase, currentRound, config.hotDuration, config.coldDuration, config.volume, playWarningBeep, stopTimer, setTimeLeft]);
 
-  // Phase transition check
   useEffect(() => {
     if (isPlaying && (phase === 'hot' || phase === 'cold') && timeLeft === 0) {
-      transitionToNext();
+      transitionToNext(true);
     }
   }, [isPlaying, phase, timeLeft, transitionToNext]);
 
   return (
-    <TimerContext.Provider value={{ startSession, stopSession, skipPhase, playTone }}>
+    <TimerContext.Provider value={{ startSession, stopSession, skipPhase, finishSessionEarly, playTone }}>
       {children}
     </TimerContext.Provider>
   );
